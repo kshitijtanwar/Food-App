@@ -5,11 +5,11 @@ import CartContext from "../../store/Cart-Context";
 const MealItem = ({ name, description, price, id }) => {
     const cartCtx = useContext(CartContext);
     const itemPrice = `$${price.toFixed(2)}`;
-    const addToCartHandler = (qty) => {
+    const addToCartHandler = (quantity) => {
         cartCtx.addItem({
             id: id,
             name: name,
-            qty: qty,
+            quantity: quantity,
             price: price,
         });
     };

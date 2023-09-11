@@ -27,7 +27,7 @@ const MealItemForm = (props) => {
                     defaultValue: "1",
                 }}
             />
-            <button>+ Add</button>
+            <button type="submit">+ Add</button>
             {!qtyIsValid && <p className="isValid-text">Please enter valid Amount</p>}
         </form>
     );

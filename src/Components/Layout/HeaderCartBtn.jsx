@@ -7,7 +7,7 @@ const HeaderCartBtn = ({ onClick }) => {
     const cartCtx = useContext(CartContext);
 
     const numberOfCartItems = cartCtx.items.reduce((curNumber, item) => {
-        return curNumber + item.qty;
+        return curNumber + item.quantity;
     }, 0);
     return (
         <button className="button" onClick={onClick}>

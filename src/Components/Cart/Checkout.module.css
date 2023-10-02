@@ -44,7 +44,15 @@
   .actions button:active {
     background-color: #ffe6dc;
   }
-  
+  .actions button:disabled,
+  .actions button:hover:disabled,.actions button:active:disabled {
+    background-color: #666161;
+    cursor: not-allowed;
+  }
+  .errorTxt{
+    color: red;
+    padding: 0.25rem;
+  }
   .actions .submit {
     border: 1px solid #5a1a01;
     background-color: #5a1a01;

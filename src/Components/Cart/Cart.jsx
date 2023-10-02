@@ -16,8 +16,8 @@ const Cart = (props) => {
         cartCtx.addItem(item);
     };
     const onCheckout = () => {
-      setCheckout(true);
-    }
+        setCheckout(true);
+    };
 
     const cartItems = (
         <ul className="cart-items">
@@ -35,6 +35,18 @@ const Cart = (props) => {
             })}
         </ul>
     );
+    const submittedDetailsHandler = (userData) => {
+        fetch(
+            "https://react-meals-41662-default-rtdb.firebaseio.com/orders.json?auth=UdCBnM1guUHaZjwXcth30DVhlYl3IgohlN6l1aNS",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    userInfo: userData,
+                    orderedItems: cartCtx.items,
+                }),
+            }
+        );
+    };
     return (
         <Modal onClose={props.onHideCart}>
             {cartItems}
@@ -42,13 +54,24 @@ const Cart = (props) => {
                 <span>Total Amount</span>
                 <span>{totalAmount}</span>
             </div>
-            {hasCheckout && <Checkout onCancel={props.onHideCart}/>}
-           {!hasCheckout && <div className="actions">
-                <button className="button--alt" onClick={props.onHideCart}>
-                    Close
-                </button>
-                {hasItems && <button className="button" onClick={onCheckout}>Order</button>}
-            </div>}
+            {hasCheckout && (
+                <Checkout
+                    onConfirm={submittedDetailsHandler}
+                    onCancel={props.onHideCart}
+                />
+            )}
+            {!hasCheckout && (
+                <div className="actions">
+                    <button className="button--alt" onClick={props.onHideCart}>
+                        Close
+                    </button>
+                    {hasItems && (
+                        <button className="button" onClick={onCheckout}>
+                            Order
+                        </button>
+                    )}
+                </div>
+            )}
         </Modal>
     );
 };

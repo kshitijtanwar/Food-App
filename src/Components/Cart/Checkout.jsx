@@ -44,6 +44,12 @@ const Checkout = (props) => {
         if (enteredName.trim().length === 0) {
             return;
         }
+        props.onConfirm({
+            firstName: enteredName,
+            lastName: enteredLastName,
+            address: enteredAddress,
+            phone: enteredPhone,
+        });
         nameReset();
         lastNameReset();
         phoneReset();

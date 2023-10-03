@@ -6,6 +6,8 @@ import CartItem from "./CartItem";
 import Checkout from "./Checkout";
 const Cart = (props) => {
     const [hasCheckout, setCheckout] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [didSubmit, setDidSubmit] = useState(false);
     const cartCtx = useContext(CartContext);
     const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
     const hasItems = cartCtx.items.length > 0;
@@ -35,8 +37,9 @@ const Cart = (props) => {
             })}
         </ul>
     );
-    const submittedDetailsHandler = (userData) => {
-        fetch(
+    const submittedDetailsHandler = async (userData) => {
+        setIsSubmitting(true);
+        await fetch(
             "https://react-meals-41662-default-rtdb.firebaseio.com/orders.json?auth=UdCBnM1guUHaZjwXcth30DVhlYl3IgohlN6l1aNS",
             {
                 method: "POST",
@@ -46,9 +49,12 @@ const Cart = (props) => {
                 }),
             }
         );
+        setIsSubmitting(false);
+        setDidSubmit(true);
     };
-    return (
-        <Modal onClose={props.onHideCart}>
+
+    const cartModalContent = (
+        <>
             {cartItems}
             <div className="total">
                 <span>Total Amount</span>
@@ -71,6 +77,20 @@ const Cart = (props) => {
                         </button>
                     )}
                 </div>
+            )}
+        </>
+    );
+    return (
+        <Modal onClose={props.onHideCart}>
+            {!isSubmitting && !didSubmit && cartModalContent}
+            {isSubmitting && !didSubmit && <h3>Placing order...please wait</h3>}
+            {didSubmit && (
+                <>
+                    <h3>Thanks for Ordering!!</h3>
+                    <button className="button" onClick={props.onHideCart}>
+                        Close
+                    </button>
+                </>
             )}
         </Modal>
     );

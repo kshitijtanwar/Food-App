@@ -34,15 +34,19 @@ const cartReducer = (state, action) => {
             totalAmount: updatedTotalAmount,
         };
     }
+    
     if (action.type === "REMOVE") {
         const existingCartItemIndex = state.items.findIndex((item) => {
             return item.id === action.id;
         });
         const existingCartItem = state.items[existingCartItemIndex];
-    
+
         // Ensure that updatedTotalAmount is never negative
-        const updatedTotalAmount = Math.max(0, state.totalAmount - existingCartItem.price);
-    
+        const updatedTotalAmount = Math.max(
+            0,
+            state.totalAmount - existingCartItem.price
+        );
+
         let updatedItems;
         if (existingCartItem.quantity === 1) {
             // Remove the item from updatedItems when quantity is 0
@@ -60,7 +64,10 @@ const cartReducer = (state, action) => {
             totalAmount: updatedTotalAmount,
         };
     }
-    
+    if (action.type === "CLEAR") {
+        return defaultCartState;
+    }
+
     return defaultCartState;
 };
 
@@ -76,12 +83,16 @@ const CartProvider = (props) => {
     const removeItemFromCartHandler = (id) => {
         dispatchCartAction({ type: "REMOVE", id: id });
     };
+    const clearAllItemFromCartHandler = () => {
+        dispatchCartAction({ type: "CLEAR" });
+    };
 
     const cartContextHelper = {
         items: cartState.items,
         totalAmount: cartState.totalAmount,
         addItem: addItemToCartHandler,
         removeItem: removeItemFromCartHandler,
+        clearItems: clearAllItemFromCartHandler,
     };
     return (
         <CartContext.Provider value={cartContextHelper}>
